@@ -21,12 +21,9 @@ def Read_url(url_common,file):
     header = {
     'User-Agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:55.0) Gecko/20100101 Firefox/55.0',
     'Referer':url_common
-    #'Referer':'http://www.zzjtcx.com/'
 }
-    #url_file = 'http://www.zzjtcx.com/sy/gjds/getCongestionRoad.htm'
     
     url_file = url_common + '/' + file
-    
     
     #
     cookie = cookielib.MozillaCookieJar()
@@ -41,19 +38,30 @@ def Read_url(url_common,file):
     
     return data
 
+
+def Deal_data_detail(data):
+    """
+    处理 单行数据
+    """
+    if data[-1] == '}':
+        pass
+    else:
+        data += '}'
+        
+    json_data = json.loads(data)
+    
+    df = pd.DataFrame([json_data.values()],columns = json_data.keys())
+    
+    return df
+
 def Deal_data(data):
     """
     处理 url的返回的数据
     """
     data_list = data[1:-1].split('},')
     df = pd.DataFrame()
-    for num,data_detail in enumerate(data_list):
-        if num == len(data_list) - 1:
-            pass
-        else:
-            data_detail += '}'
-        json_data = json.loads(data_detail)
-        mid_df = pd.DataFrame([json_data.values()],columns = json_data.keys())
+    for data_detail in data_list:
+        mid_df = Deal_data_detail(data_detail)
         df = pd.concat([df,mid_df])
     return df
  
