@@ -81,7 +81,7 @@ def zzjtcx():
     
     return df
    
-   if __name__ == '__main__':
+if __name__ == '__main__':
     import cookielib
     import urllib2
     from urllib2 import Request,urlopen
